@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <test pkg="rrt_turtlebot" type="planner_test" test-name="planner_test"/>
+</launch>

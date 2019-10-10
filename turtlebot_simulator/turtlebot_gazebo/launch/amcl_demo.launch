@@ -1,0 +1,28 @@
+<launch>
+  <!-- Map server -->
+  <arg name="map_file" default="$(env TURTLEBOT_GAZEBO_MAP_FILE)"/>
+  <arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>  <!-- r200, kinect, asus_xtion_pro -->
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!-- Localization -->
+  <arg name="initial_pose_x" default="-7.0"/>
+  <arg name="initial_pose_y" default="0.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
+  <arg name="custom_amcl_launch_file" default="$(find rrt_turtlebot)/config/amcl.launch.xml"/>
+
+  <include file="$(arg custom_amcl_launch_file)">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include>
+
+  <!-- Move base -->
+ <include file="$(find rrt_turtlebot)/config/move_base.launch.xml"/>
+  <rosparam file="$(find rrt_turtlebot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+  <rosparam file="$(find rrt_turtlebot)/config/local_costmap_params.yaml" command="load" />
+  <rosparam file="$(find rrt_turtlebot)/config/global_costmap_params.yaml" command="load" />
+  <rosparam file="$(find rrt_turtlebot)/config/base_local_planner_params.yaml" command="load" />
+  <rosparam file="$(find rrt_turtlebot)/config/move_base_params.yaml" command="load" />
+</launch>
+
